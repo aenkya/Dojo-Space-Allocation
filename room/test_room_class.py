@@ -9,8 +9,10 @@ import Room
 class RoomClassTest():
     """Testing Room Class"""
 
+    def setUp(self):
+        self.dojo = Dojo()
+        self.room = Room()
+
     def test_room_instance(self):
-        dojo = Dojo()
-        room = dojo.create_room()
         self.assertIsInstance(
-            room, Room, msg='The object should be an instance of the `Room` class')
+            self.room, Room, msg='The object should be an instance of the `Room` class')
