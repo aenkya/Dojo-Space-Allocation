@@ -9,7 +9,10 @@ import Person
 class PersonClassTest():
     """Testing Person Class"""
 
+    def setUp(self):
+        self.dojo = Dojo()
+        self.person = Person()
+
     def test_person_instance(self):
-        person = Person()
         self.assertIsInstance(
-            person, Person, msg='The object should be an instance of the `Person` class')
+            self.person, Person, msg='The object should be an instance of the `Person` class')
