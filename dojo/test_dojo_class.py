@@ -2,7 +2,7 @@
 Unit tests for the Dojo Class
 """
 import unittest
-from dojo import Dojo
+from .dojo import Dojo
 
 
 class DojoClassTest(unittest.TestCase):

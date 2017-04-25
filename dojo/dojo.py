@@ -1,6 +1,6 @@
 from docopt import docopt, DocoptExit
-from living_space.living_space import living_space
-from office_space.office_space import office_space
+from ..living_space.living_space import living_space
+from ..office_space.office_space import office_space
 
 
 class Dojo(object):
