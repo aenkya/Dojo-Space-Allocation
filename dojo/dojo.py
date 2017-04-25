@@ -11,13 +11,16 @@ class Dojo(object):
             self.name = name
         else:
             raise TypeError("Name should be string")
-        self.rooms = ['Kenya', 'Nigeria', 'Uganda', 'Costa Rica']
 
-    def create_room(self, rooms):
+        self.names = ['Kenya', 'Nigeria', 'Uganda', 'Costa Rica']
+
+    def create_room(self, room_type, rooms):
         if isinstance(rooms, list):
+            if room_type.lower() is not ('office' or 'living'):
+                raise ValueError("Space Type not recognized")
             for room_name in rooms:  # Loop through rooms argument for all rooms in list
                 current_room = Room(room_name)
                 self.rooms.append(current_room)
             return self.rooms
         else:
-            raise ValueError
+            raise TypeError('Rooms argument should be a list')
