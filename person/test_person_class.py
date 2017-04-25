@@ -6,7 +6,7 @@ from dojo import Dojo
 import Person
 
 
-class PersonClassTest():
+class PersonClassTest(unittest.TestCase):
     """Testing Person Class"""
 
     def setUp(self):

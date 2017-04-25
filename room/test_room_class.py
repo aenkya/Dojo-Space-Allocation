@@ -6,7 +6,7 @@ from dojo import Dojo
 import Room
 
 
-class RoomClassTest():
+class RoomClassTest(unittest.TestCase):
     """Testing Room Class"""
 
     def setUp(self):

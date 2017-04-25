@@ -5,7 +5,7 @@ import unittest
 from dojo import Dojo
 
 
-class DojoClassTest():
+class DojoClassTest(unittest.TestCase):
     """Testing DojoClass"""
 
     def setUp(self):
