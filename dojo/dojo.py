@@ -1,5 +1,5 @@
 from docopt import docopt, DocoptExit
-from room import Room
+from ..living_space import living_space
 
 
 class Dojo(object):
@@ -18,5 +18,6 @@ class Dojo(object):
             for room_name in rooms:  # Loop through rooms argument for all rooms in list
                 current_room = Room(room_name)
                 self.rooms.append(current_room)
+            return self.rooms
         else:
             raise ValueError

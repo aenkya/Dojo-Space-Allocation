@@ -14,3 +14,12 @@ class DojoClassTest(unittest.TestCase):
     def test_dojo_instance(self):
         self.assertIsInstance(
             self.dojo, Dojo, msg='The object should be an instance of the `Dojo` class')
+
+    def test_create_room_method_raises_typeerror_if_rooms_arg_not_list(self):
+        self.assertRaises(TypeError, self.dojo.create_room, 'Room 1')
+
+    def test_create_room_method_raises_valueerror_if_room_type_not_known(self):
+        args = ['New Office', 'Grey']
+        kwargs = {}
+        self.assertRaises(ValueError, self.dojo.create_room,
+                          *args, **kwargs)
