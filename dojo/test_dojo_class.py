@@ -8,6 +8,9 @@ from dojo import Dojo
 class DojoClassTest():
     """Testing DojoClass"""
 
+    def setUp(self):
+        self.dojo = Dojo()
+
     def test_dojo_instance(self):
-        dojo = Dojo()
-        self.assertIsInstance(dojo, Dojo, msg='The object should be an instance of the `Dojo` class')
+        self.assertIsInstance(
+            self.dojo, Dojo, msg='The object should be an instance of the `Dojo` class')
