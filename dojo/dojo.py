@@ -1,5 +1,6 @@
 from docopt import docopt, DocoptExit
-from ..living_space import living_space
+from living_space.living_space import living_space
+from office_space.office_space import office_space
 
 
 class Dojo(object):
@@ -16,10 +17,14 @@ class Dojo(object):
 
     def create_room(self, room_type, rooms):
         if isinstance(rooms, list):
-            if room_type.lower() is not ('office' or 'living'):
+            space = room_type.title()
+            if space is not ('Office' or 'Living'):
                 raise ValueError("Space Type not recognized")
             for room_name in rooms:  # Loop through rooms argument for all rooms in list
-                current_room = Room(room_name)
+                if space is 'Office':
+                    current_room = office_space(room_name, room_name)
+                else:
+                    current_room = living_space(room_name, room_name)
                 self.rooms.append(current_room)
             return self.rooms
         else:

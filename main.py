@@ -15,7 +15,9 @@ Examples
     dojo create_room Office LLK
 """
 
-from dojo import Dojo
+import sys
+from docopt import docopt, DocoptExit
+from dojo.dojo import Dojo
 
 
 def main():
@@ -23,7 +25,8 @@ def main():
     print("Welcome to the Dojo Space Allocation Program")
     print("--------------------XXXXXXXXX---------------")
     dojo = Dojo('DOJO-01', 'The Dojo')
-    dojo.create_room('office', ['conference', 'work'])
+    rooms = dojo.create_room('office', ['conference', 'work'])
+    print(rooms)
 
 if __name__ == '__main__':
     opt = docopt(__doc__, sys.argv[1:])
