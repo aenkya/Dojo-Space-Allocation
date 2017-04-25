@@ -11,5 +11,12 @@ class Dojo(object):
             self.name = name
         else:
             raise TypeError("Name should be string")
-        self.rooms = []
-        default_rooms = ['Kenya', 'Nigeria', 'Uganda', 'Costa Rica']
+        self.rooms = ['Kenya', 'Nigeria', 'Uganda', 'Costa Rica']
+
+    def create_room(self, rooms):
+        if isinstance(rooms, list):
+            for room_name in rooms:  # Loop through rooms argument for all rooms in list
+                current_room = Room(room_name)
+                self.rooms.append(current_room)
+        else:
+            raise ValueError
