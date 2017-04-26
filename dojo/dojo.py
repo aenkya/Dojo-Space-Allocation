@@ -8,14 +8,18 @@ class Dojo(object):
 
     def __init__(self, id, name):
         self.id = id
-        if isinstance(name, string):
+        if isinstance(name, str):
             self.name = name
         else:
-            raise TypeError("Name should be string")
+            raise TypeError
 
         self.names = ['Kenya', 'Nigeria', 'Uganda', 'Costa Rica']
 
     def create_room(self, room_type, rooms):
+        """Usage: create_room <room_type> <room_name>..."""
+        room_type = arg["<room_type>"]
+        room_name = arg["<room_name>..."]
+        rooms = room_name.split()
         if isinstance(rooms, list):
             space = room_type.title()
             if space is not ('Office' or 'Living'):
@@ -28,4 +32,4 @@ class Dojo(object):
                 self.rooms.append(current_room)
             return self.rooms
         else:
-            raise TypeError('Rooms argument should be a list')
+            raise ValueError('Rooms argument should be a list')

@@ -9,7 +9,7 @@ class DojoClassTest(unittest.TestCase):
     """Testing DojoClass"""
 
     def setUp(self):
-        self.dojo = Dojo()
+        self.dojo = Dojo('THEDOJO', 'The Dojo')
 
     def test_dojo_instance(self):
         self.assertIsInstance(
