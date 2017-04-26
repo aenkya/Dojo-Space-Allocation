@@ -2,8 +2,8 @@
 Unit tests for the Person Class
 """
 import unittest
-from ..dojo.dojo import Dojo
-from .person import Person
+from dojo.dojo import Dojo
+from person import Person
 
 
 class PersonClassTest(unittest.TestCase):

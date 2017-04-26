@@ -30,12 +30,12 @@ class main(object):
         print('\nLocation Name: ' + self.dojo.name + '')
 
     def create_room(self, room_type, room_names):
-        print (self.dojo.create_room(str(room_type), room_names))
+        self.dojo.create_room(str(room_type), room_names)
 
 
 if __name__ == '__main__':
-    opt = docopt(__doc__, sys.argv[1:])
+    opt = docopt(__doc__)
     dojo = main()
 
     """Usage: create_room <room_type> <room_name>..."""
-    dojo.create_room(sys.argv[2], sys.argv[3:])
+    dojo.create_room(opt["<room_type>"], opt["<room_name>"])

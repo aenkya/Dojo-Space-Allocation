@@ -2,8 +2,8 @@
 Unit tests for the Room Class
 """
 import unittest
-from ..dojo.dojo import Dojo
-from .room import Room
+from dojo.dojo import Dojo
+from room import Room
 
 
 class RoomClassTest(unittest.TestCase):
