@@ -7,4 +7,3 @@ class living_space(Room):
     def __init__(self, name):
         super(living_space, self).__init__(name)
         self.capacity = 4
-        self.name = name

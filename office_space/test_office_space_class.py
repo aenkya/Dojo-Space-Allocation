@@ -2,7 +2,7 @@
 Unit tests for the office_space Class
 """
 import unittest
-from .office_space import office_space
+from office_space import office_space
 
 
 class office_space_classTest(unittest.TestCase):

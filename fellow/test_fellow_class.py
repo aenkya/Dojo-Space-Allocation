@@ -2,7 +2,7 @@
 Unit tests for the fellow Class
 """
 import unittest
-from .fellow import Fellow
+from fellow.fellow import Fellow
 
 
 class fellow_classTest(unittest.TestCase):
