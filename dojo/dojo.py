@@ -15,7 +15,8 @@ class Dojo(object):
 
         self.names = ['Kenya', 'Nigeria', 'Uganda', 'Costa Rica']
         self.people = []
-        self.rooms = []
+        self.living_spaces = []
+        self.office_spaces = []
 
     def create_room(self, room_type, rooms):
         if isinstance(rooms, list):
@@ -27,12 +28,13 @@ class Dojo(object):
                     import pdb
                     pdb.set_trace()
                     current_room = office_space(room_name)
-                    self.rooms.append(current_room)
+                    self.office_spaces.append(current_room)
                     print("An Office Called "+ current_room.name + " has been successfully created!")
                 else:
                     current_room = living_space(room_name)
-                    self.rooms.append(current_room)
+                    self.living_spaces.append(current_room)
                     print("A Living Space Called "+ current_room.name + " has been successfully created!")
+                return current_room
         else:
             raise ValueError('Rooms argument should be a list')
 
