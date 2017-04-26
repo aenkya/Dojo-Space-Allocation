@@ -53,7 +53,7 @@ class SpaceAllocation(cmd.Cmd):
     def do_create_room(self, params):
         """ Usage: create_room <room_type> <room_name>..."""
 
-        return self.dojo.create_room(params["<room_type"], params["<room_name>"])
+        return dojo.create_room(params["<room_type>"], params["<room_name>"])
 
     # def add_person(self, person_name, person_type, wants_accomodation):
     # return self.dojo.add_person(str(person_name), person_type,

@@ -26,16 +26,15 @@ class Dojo(object):
             for room_name in rooms:  # Loop through rooms argument for all rooms in list
                 if space == 'Office':
                     import pdb
-                    pdb.set_trace()
+                    # pdb.set_trace()
                     current_room = office_space(room_name)
-                    self.office_spaces.append(current_room)
-                    print("An Office Called "+ current_room.name + " has been successfully created!")
+                    self.living_spaces.append(current_room)
+                    print("An Office Called " + current_room.name +
+                          " has been successfully created!")
                 else:
                     current_room = living_space(room_name)
-                    self.living_spaces.append(current_room)
-                    print("A Living Space Called "+ current_room.name + " has been successfully created!")
-                return current_room
+                    self.office_spaces.append(current_room)
+                    print("A Living Space Called " + current_room.name +
+                          " has been successfully created!")
         else:
             raise ValueError('Rooms argument should be a list')
-
-
