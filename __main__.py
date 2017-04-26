@@ -20,14 +20,22 @@ from docopt import docopt, DocoptExit
 from dojo.dojo import Dojo
 
 
-def main():
+class main(object):
     """Main Application Entry Point"""
-    print("Welcome to the Dojo Space Allocation Program")
-    print("--------------------XXXXXXXXX---------------")
-    dojo = Dojo('DOJO-01', 'The Dojo')
-    rooms = dojo.create_room('office', ['conference', 'work'])
-    print(rooms)
+
+    def __init__(self):
+        print("\nWelcome to the Dojo Space Allocation Program")
+        print("______________________________________________")
+        self.dojo = Dojo('DOJO01', 'The Dojo')
+        print('\nLocation Name: ' + self.dojo.name + '')
+
+    def create_room(self, room_type, room_names):
+        print (self.dojo.create_room(str(room_type), room_names))
+
 
 if __name__ == '__main__':
     opt = docopt(__doc__, sys.argv[1:])
-    main()
+    dojo = main()
+
+    """Usage: create_room <room_type> <room_name>..."""
+    dojo.create_room(sys.argv[2], sys.argv[3:])
