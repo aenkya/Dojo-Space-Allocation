@@ -23,9 +23,11 @@ class Dojo(object):
         self.available_living_slots = {}
         self.available_office_slots = {}
         self.allocated_spots = {}
+        self.unallocated_people = []
         self.root_dir = os.path.dirname(os.path.abspath(__file__))
 
     def create_room(self, room_type, rooms):
+        room_available = False
         if isinstance(rooms, list):
             space = room_type.title()
             if (not space == 'Office') and (not space == 'Living'):
@@ -41,6 +43,7 @@ class Dojo(object):
                         self.office_spaces[room_name] = current_room
                         print("An Office Called " + current_room.name +
                               " has been successfully created!")
+                        room_available = True
                 else:
                     if self.check_if_room_exists(room_name, space) is True:
                         print("Room with name " +
@@ -51,8 +54,25 @@ class Dojo(object):
                         self.living_spaces[room_name] = current_room
                         print("A Living Space Called " + current_room.name +
                               " has been successfully created!")
+                        room_available = True
         else:
             raise ValueError('Rooms argument should be a list')
+        if room_available == True:
+            person_type = ''
+            for person in self.unallocated_people:
+                if isinstance(person, Fellow):
+                    person_type = 'Fellow'
+                    person_source = self.fellows
+                    wants_accomodation = True
+                elif isinstance(person, Staff):
+                    person_type = 'Staff'
+                    person_source = self.staff
+                    wants_accomodation = False
+                print('\nNOTE::\n{}'.format(person.name) +
+                      ' seems to have no room yet')
+                self.add_person(person.name, person_type,
+                                wants_accomodation)
+                self.unallocated_people.remove(person)
 
     def add_person(self, person_name, person_type, wants_accomodation):
         """Function to add person to dojo and allocate room"""
@@ -77,10 +97,12 @@ class Dojo(object):
                 elif person_type == 'Staff':
                     staff = Staff(person_name, gender, age, nationality)
                     self.staff[person_name] = staff
-                    print(person_name + ' has been successfully added')
+                    print(person_name + ' has been successfully added\n\n')
 
                 self.add_to_room(person_name, person_type)
+                print('Living Spaces available')
                 print(self.available_living_slots)
+                print('Office Spaces available')
                 print(self.available_office_slots)
 
     def check_if_person_exists(self, person, person_type):
@@ -91,7 +113,10 @@ class Dojo(object):
             person_source = self.staff
 
         if person in person_source:
-            return True
+            if person_source[person] in self.unallocated_people:
+                return False
+            else:
+                return True
         else:
             return False
 
@@ -111,9 +136,9 @@ class Dojo(object):
         allocated = False
         person_source = []
         if person_type == 'Fellow':
+            self.find_empty_slots('Living')
             if self.fellows[person].wants_accomodation is True:
                 living_allocated = False
-                self.find_empty_slots('Living')
                 while (living_allocated is False) and len(self.available_living_slots) > 0:
                     random_value = random.choice(
                         list(self.available_living_slots))
@@ -129,37 +154,41 @@ class Dojo(object):
                                 break
                         print(person + ' has been allocated the living space ' +
                               self.living_spaces[random_value].name)
+                        self.fellows[person].wants_accomodation = False
                         living_allocated = True
+                if len(self.available_living_slots) == 0:
+                    self.unallocated_people.append(self.fellows[person])
+                    print(
+                        "Slots for Living Space are not currently available, {} will be assigned room later".format(person))
             person_source = self.fellows
         else:
             person_source = self.staff
 
         self.find_empty_slots('Office')
         while (allocated is False) and len(self.available_office_slots) > 0:
-            random_value = random.choice(list(self.available_office_slots))
+            random_value = random.choice(
+                list(self.available_office_slots))
             if self.available_office_slots[random_value] == 0:
                 del self.available_office_slots[random_value]
                 continue
             else:
                 for i in range(0, len(self.office_spaces[random_value].room_mates)):
                     if 'X' == self.office_spaces[random_value].room_mates[i]:
-                        self.office_spaces[random_value].room_mates[i] = person
+                        self.office_spaces[
+                            random_value].room_mates[i] = person
                         self.available_office_slots[random_value] -= 1
-                    break
-
-                # print(self.office_spaces[random_value].room_mates)
-                # self.available_office_slots[random_value] -= 1
-                # for x in range(0, len(self.office_spaces[random_value].room_mates) - 1):
-                #     if self.office_spaces[random_value].room_mates[x] == 'X':
-                #         self.office_spaces[random_value].room_mates[
-                #             x] = self.fellows[person]
-                #         print(self.office_spaces[
-                #               random_value].room_mates[x])
-                #         break
+                        break
                 print(person + ' has been allocated the office space ' +
                       self.office_spaces[random_value].name)
+                self.staff[person].wants_accomodation = False
                 allocated = True
-        # print(self.available_office_slots)
+
+        if len(self.available_office_slots) == 0:
+            if person_type == 'Fellow':
+                self.unallocated_people.append(self.fellows[person])
+            else:
+                self.unallocated_people.append(self.staff[person])
+            print("Slots for Office Space are not currently available, {} will be assigned room later".format(person))
 
     def find_empty_slots(self, room_type):
         if room_type == 'Living':
@@ -250,8 +279,5 @@ class Dojo(object):
             f.write(allocated_data)
 
     def print_unallocated_people(self):
-        file_path = self.root_dir + "../files/" + filename
-        # = self._generate_unallocated_print_statement()
-
-        with open(file_path, "w") as f:
-            f.write(result_string)
+        file_name = input("Enter file to save to: ")
+        self.print_to_file('\n'.join(x.name for x in self.unallocated_people), file_name)
