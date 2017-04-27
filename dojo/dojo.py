@@ -13,10 +13,10 @@ class Dojo(object):
         else:
             raise TypeError
 
-        self.names = ['Kenya', 'Nigeria', 'Uganda', 'Costa Rica']
-        self.people = []
-        self.living_spaces = []
-        self.office_spaces = []
+        self.fellows = {}
+        self.staff = {}
+        self.living_spaces = {}
+        self.office_spaces = {}
 
     def create_room(self, room_type, rooms):
         if isinstance(rooms, list):
@@ -38,3 +38,41 @@ class Dojo(object):
                           " has been successfully created!")
         else:
             raise ValueError('Rooms argument should be a list')
+
+    def add_person(self, person_name, person_type, wants_accomodation):
+        """Function to add person to dojo and allocate room"""
+        id = person_name  # pick the name as the id
+        gender = 'Male'  # TODO: Configure gender argument
+        nationality = 'Ugandan'  # TODO: Configure gender
+        living_space_bool = False  # living space option
+        age = 25
+
+        person_type = person_type.title()
+
+        if not ((person_type == 'Fellow') or (person_type == 'Staff')):
+            import pdb
+            pdb.set_trace()
+        else:
+            if self.check_if_exists(person_name, person_type) is True:
+                print ("Person Exists!")
+                return
+            else:
+                fellow = Fellow(person_name, gender, age, nationality)
+                self.fellows[person_name] = fellow
+                print(person_name + ' has been successfully added')
+
+    def check_if_exists(self, person, person_type):
+        """Function to check if user has already been added"""
+        if person_type == 'Fellow':
+            if person in self.fellows:
+                print(self.fellows)
+                return True
+            else:
+                return False
+        elif person_type == 'Staff':
+            if person in self.staff:
+                return True
+            else:
+                return False
+        else:
+            return False
