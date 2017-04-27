@@ -280,4 +280,32 @@ class Dojo(object):
 
     def print_unallocated_people(self):
         file_name = input("Enter file to save to: ")
-        self.print_to_file('\n'.join(x.name for x in self.unallocated_people), file_name)
+        self.print_to_file(
+            '\n'.join(x.name for x in self.unallocated_people), file_name)
+
+    def reallocate_person(self, person_name, new_room_name):
+        for k in self.office_spaces:
+            for x in range(0, len(self.office_spaces[k].room_mates)):
+                if person_name == self.staff[x].name:
+                    print(self.staff[x].name)
+
+    def load_people(self):
+        file_name = input("Enter file to save to: ")
+        backroot = " \..\ "
+        folder = "files\ "
+        folder.strip()
+
+        file_path = self.root_dir + "{}".format(backroot.strip()) + \
+            "{}".format(folder.strip()) + file_name
+        if os.path.isfile(file_path):
+            with open(file_path, "r") as f:
+                for line in f.readlines():
+                    tokens = line.strip().split(" ")
+                    name = " ".join(tokens[:2])
+                    person_type = tokens[2]
+                    wants_accomodation = tokens[3:][0] if tokens[3:] else 'N'
+                    if wants_accomodation == 'Y':
+                        wants_accomodation = True
+                    else:
+                        wants_accomodation = False
+                    self.add_person(name, person_type, wants_accomodation)
