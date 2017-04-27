@@ -9,4 +9,4 @@ class Fellow(Person):
         self.wants_accomodation = False
 
     def request_accomodation(self):
-    	self.wants_accomodation = True
+        self.wants_accomodation = True
