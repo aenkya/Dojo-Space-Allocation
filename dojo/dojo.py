@@ -2,6 +2,7 @@ import random
 from living_space.living_space import living_space
 from office_space.office_space import office_space
 from fellow.fellow import Fellow
+from staff.staff import Staff
 
 
 class Dojo(object):
@@ -66,12 +67,17 @@ class Dojo(object):
                 print("Person Exists!")
                 return
             else:
-                fellow = Fellow(person_name, gender, age, nationality)
-                if wants_accomodation is True:
-                    fellow.request_accomodation()
-                self.fellows[person_name] = fellow
-                print(person_name + ' has been successfully added')
-                self.add_to_room(person_name)
+                if person_type == 'Fellow':
+                    fellow = Fellow(person_name, gender, age, nationality)
+                    if wants_accomodation is True:
+                        fellow.request_accomodation()
+                    self.fellows[person_name] = fellow
+                elif person_type == 'Staff':
+                    staff = Staff(person_name, gender, age, nationality)
+                    self.staff[person_name] = staff
+                    print(person_name + ' has been successfully added')
+
+                self.add_to_room(person_name, person_type)
 
     def check_if_person_exists(self, person, person_type):
         """Function to check if user has already been added"""
@@ -97,51 +103,86 @@ class Dojo(object):
         else:
             return False
 
-    def add_to_room(self, person):
+    def add_to_room(self, person, person_type):
         allocated = False
+        person_source = []
+        if person_type == 'Fellow':
+            if self.fellows[person].wants_accomodation is True:
+                living_allocated = False
+                self.find_empty_slots('Living')
+                while (living_allocated is False) and len(self.available_living_slots) > 0:
+                    random_value = random.choice(
+                        list(self.available_living_slots))
+                    if self.available_living_slots[random_value] == 0:
+                        del self.available_living_slots[random_value]
+                        continue
+                    else:
+                        for i in range(0, len(self.living_spaces[random_value].room_mates)):
+                            if 'X' == self.living_spaces[random_value].room_mates[i]:
+                                self.living_spaces[
+                                    random_value].room_mates[i] = person
+                                self.available_living_slots[random_value] -= 1
+                                break
+                        print(person + ' has been allocated the living space ' +
+                              self.living_spaces[random_value].name)
+                        living_allocated = True
+            person_source = self.fellows
+        else:
+            person_source = self.staff
 
-        if self.fellows[person].wants_accomodation is True:
-            self.find_empty_slots('Office')
-            while allocated is False and len(self.available_living_slots) > 0:
-                random_value = random.choice(list(self.available_living_slots))
-                if self.available_living_slots[random_value] == 0:
-                    del self.available_living_slots[random_value]
-                    continue
-                else:
-                    self.living_spaces[random_value].room_mates.append(self.fellows[
-                                                                       person])
-                    self.available_living_slots[random_value] -= 1
-                    for x in range(0, len(self.living_spaces[random_value].room_mates) - 1):
-                        if self.living_spaces[random_value].room_mates[x] == 'X':
-                            self.living_spaces[random_value].room_mates[
-                                x] = self.fellows[person]
-                            print(self.living_spaces[
-                                  random_value].room_mates[x])
-                            break
-                    print(person + ' has been allocated the living space ' +
-                          self.living_spaces[random_value].name)
-                    allocated = True
-        # print(self.available_living_slots)
+        self.find_empty_slots('Office')
+        while (allocated is False) and len(self.available_office_slots) > 0:
+            random_value = random.choice(list(self.available_office_slots))
+            if self.available_office_slots[random_value] == 0:
+                del self.available_office_slots[random_value]
+                continue
+            else:
+                for i in range(0, len(self.office_spaces[random_value].room_mates)):
+                    if 'X' == self.office_spaces[random_value].room_mates[i]:
+                        self.office_spaces[random_value].room_mates[i] = person
+                        self.available_office_slots[random_value] -= 1
+                    break
+
+                # print(self.office_spaces[random_value].room_mates)
+                # self.available_office_slots[random_value] -= 1
+                # for x in range(0, len(self.office_spaces[random_value].room_mates) - 1):
+                #     if self.office_spaces[random_value].room_mates[x] == 'X':
+                #         self.office_spaces[random_value].room_mates[
+                #             x] = self.fellows[person]
+                #         print(self.office_spaces[
+                #               random_value].room_mates[x])
+                #         break
+                print(person + ' has been allocated the office space ' +
+                      self.office_spaces[random_value].name)
+                allocated = True
+        # print(self.available_office_slots)
 
     def find_empty_slots(self, room_type):
         if room_type == 'Living':
-            total_available_slots = self.available_living_slots
-            room_spaces = self.living_spaces
-        if room_type == 'Office':
-            total_available_slots = self.available_office_slots
-            room_spaces = self.office_spaces
 
-        total_available_slots = {}
-        for i in room_spaces:
-            for n in range(0, len(room_spaces[i].room_mates)):
-                if room_spaces[i].room_mates[n] == 'X':
-                    if room_spaces[i].name in total_available_slots:
-                        total_available_slots[
-                            room_spaces[i].name] += 1
-                    else:
-                        total_available_slots[
-                            room_spaces[i].name] = 1
-        print(total_available_slots)
+            self.available_living_slots = {}
+            for i in self.living_spaces:
+                for n in range(0, len(self.living_spaces[i].room_mates)):
+                    if self.living_spaces[i].room_mates[n] == 'X':
+                        if self.living_spaces[i].name in self.available_living_slots:
+                            self.available_living_slots[
+                                self.living_spaces[i].name] += 1
+                        else:
+                            self.available_living_slots[
+                                self.living_spaces[i].name] = 1
+        if room_type == 'Office':
+            self.available_office_slots = {}
+            for i in self.office_spaces:
+                for n in range(0, len(self.office_spaces[i].room_mates)):
+                    if self.office_spaces[i].room_mates[n] == 'X':
+                        if self.office_spaces[i].name in self.available_office_slots:
+                            self.available_office_slots[
+                                self.office_spaces[i].name] += 1
+                        else:
+                            self.available_office_slots[
+                                self.office_spaces[i].name] = 1
+        print(self.available_office_slots)
+        print(self.available_living_slots)
 
     def show_available_room(self, room_name, room_type):
         if room_type == 'living_space':
