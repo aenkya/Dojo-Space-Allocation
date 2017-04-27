@@ -1,7 +1,6 @@
 class Person(object):
 
-    def __init__(self, id, name, gender, age, nationality):
-        self.id = id
+    def __init__(self, name, gender, age, nationality):
         self.name = name
         self.gender = gender
         self.age = age
