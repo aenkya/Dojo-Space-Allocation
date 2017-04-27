@@ -17,7 +17,6 @@ Examples
     dojo create_room Office LLK
 """
 
-import sys
 import os
 import cmd
 from docopt import docopt, DocoptExit
@@ -62,8 +61,8 @@ class SpaceAllocation(cmd.Cmd):
 
     @get_docopt_args
     def do_add_person(params):
-        """ Usage: add_person <person_name> <person_type> [<wants_accomodation>]"""
-        wants_accomodation = params["<wants_accomodation>"]
+        """ Usage: add_person <person_name> <person_type> [wants_accomodation]"""
+        wants_accomodation = params["wants_accomodation"]
         if wants_accomodation == 'Y':
             wants_accomodation = True
         else:
