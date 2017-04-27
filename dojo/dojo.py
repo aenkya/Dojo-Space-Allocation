@@ -1,4 +1,5 @@
 import random
+import os
 from living_space.living_space import living_space
 from office_space.office_space import office_space
 from fellow.fellow import Fellow
@@ -21,6 +22,8 @@ class Dojo(object):
         self.office_spaces = {}
         self.available_living_slots = {}
         self.available_office_slots = {}
+        self.allocated_spots = {}
+        self.root_dir = os.path.dirname(os.path.abspath(__file__))
 
     def create_room(self, room_type, rooms):
         if isinstance(rooms, list):
@@ -56,7 +59,6 @@ class Dojo(object):
         gender = 'Male'  # TODO: Configure gender argument
         nationality = 'Ugandan'  # TODO: Configure gender
         age = 25  # TODO: Configure Gender
-
         person_type = person_type.title()
 
         if not ((person_type == 'Fellow') or (person_type == 'Staff')):
@@ -78,6 +80,8 @@ class Dojo(object):
                     print(person_name + ' has been successfully added')
 
                 self.add_to_room(person_name, person_type)
+                print(self.available_living_slots)
+                print(self.available_office_slots)
 
     def check_if_person_exists(self, person, person_type):
         """Function to check if user has already been added"""
@@ -181,9 +185,73 @@ class Dojo(object):
                         else:
                             self.available_office_slots[
                                 self.office_spaces[i].name] = 1
-        print(self.available_office_slots)
-        print(self.available_living_slots)
+
+    def find_occupied_slots(self, room_type):
+        if room_type == 'Living':
+
+            self.available_living_slots = {}
+            for i in self.living_spaces:
+                for n in range(0, len(self.living_spaces[i].room_mates)):
+                    if self.living_spaces[i].room_mates[n] == 'X':
+                        continue
+                    else:
+                        print(self.living_spaces[i])
+        if room_type == 'Office':
+            self.available_office_slots = {}
+            for i in self.office_spaces:
+                for n in range(0, len(self.office_spaces[i].room_mates)):
+                    if self.office_spaces[i].room_mates[n] == 'X':
+                        continue
+                    else:
+                        print(self.office_spaces[i])
 
     def show_available_room(self, room_name, room_type):
         if room_type == 'living_space':
             print(self.living_spaces.find('room_name'))
+
+    def print_allocations(self):
+        file_name = input("Enter file to save to: ")
+        allocated_data = ''
+        allocated_data += "\n\n Living Spaces \n"
+        for room_name, room in self.living_spaces.items():
+            allocated_data += room_name
+            allocated_data += "\n------------------------\n"
+            spaces = self.living_spaces
+            for x in range(0, len(spaces[room_name].room_mates)):
+                if spaces[room_name].room_mates[x] == 'X':
+                    continue
+                else:
+                    allocated_data += spaces[room_name].room_mates[x] + ', '
+                allocated_data += "\n\n"
+        allocated_data += "\n\n Office Spaces \n"
+        allocated_data += "\n------------------------\n"
+        for room_name, room in self.office_spaces.items():
+            allocated_data += room_name
+            allocated_data += "\n------------------------\n"
+            spaces = self.office_spaces
+            for x in range(0, len(spaces[room_name].room_mates)):
+                if spaces[room_name].room_mates[x] == 'X':
+                    continue
+                else:
+                    allocated_data += spaces[room_name].room_mates[x] + ', '
+                allocated_data += "\n\n"
+        print(allocated_data)
+        self.print_to_file(allocated_data, file_name)
+
+    def print_to_file(self, allocated_data, file_name):
+
+        backroot = " \..\ "
+        folder = "files\ "
+        folder.strip()
+
+        file_path = self.root_dir + "{}".format(backroot.strip()) + \
+            "{}".format(folder.strip()) + file_name
+        with open(file_path, "w") as f:
+            f.write(allocated_data)
+
+    def print_unallocated_people(self):
+        file_path = self.root_dir + "../files/" + filename
+        # = self._generate_unallocated_print_statement()
+
+        with open(file_path, "w") as f:
+            f.write(result_string)
