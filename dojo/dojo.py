@@ -327,14 +327,12 @@ class Dojo(object):
         for person in self.fellows:
             person_name = person.name
             wants_accomodation = person.wants_accomodation
-            age = person.age
             gender = person.gender
             nationality = person.nationality
 
             person_to_save = Fellow(
                 person_name=person_name,
                 wants_accomodation=wants_accomodation,
-                age=age,
                 nationality=nationality,
                 gender=gender
             )
@@ -344,13 +342,11 @@ class Dojo(object):
 
         for person in self.staff:
             person_name = person.name
-            age = person.age
             gender = person.gender
             nationality = person.nationality
 
             person_to_save = Fellow(
                 person_name=person_name,
-                age=age,
                 nationality=nationality,
                 gender=gender
             )
