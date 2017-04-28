@@ -31,7 +31,7 @@ class Dojo(object):
         if isinstance(rooms, list):
             space = room_type.title()
             if (not space == 'Office') and (not space == 'Living'):
-                raise ValueError("Space Type not recognized")
+                print("Room type not recognized")
             for room_name in rooms:  # Loop through rooms argument for all rooms in list
                 if space == 'Office':
                     if self.check_if_room_exists(room_name, space) is True:
