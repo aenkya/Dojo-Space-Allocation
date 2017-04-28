@@ -13,8 +13,12 @@ Usage:
     dojo --version
     dojo close
 
+Arguments:
+    FELLOW|STAFF           Type of person to create/employ
+    wants_accommodation    Specify if person(only fellow) wants living space
+
 Options:
-    -h --help  Show this screen
+    -h, --help  Use with a command to show the command's help messsage
     --version  Show version
     --close -c   Close the program
 
@@ -51,11 +55,14 @@ def get_docopt_args(func):
 
 
 class SpaceAllocation(cmd.Cmd):
-    """Main Application Entry Point"""
+    """
+    Main Application Entry Point
+    Type help to get a list of usage commands
+    """
     os.system('cls')
     print("\nWelcome to the Dojo Space Allocation Program")
     print("______________________________________________")
-    print('\nLocation Name: ' + dojo.name + '')
+    print('\nLocation Name: ' + dojo.name + '\n')
 
     prompt = 'SpaceAlloc:  '  # prompt to replace default cmd prompt message
 
@@ -119,7 +126,7 @@ class SpaceAllocation(cmd.Cmd):
     @get_docopt_args
     def do_save_state(params):
         """Usage: save_state [--db=sqlite_database] """
-        pass
+        return dojo.save_state(params['--db'])
 
     @get_docopt_args
     def do_load_state(params):
