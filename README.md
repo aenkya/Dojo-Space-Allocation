@@ -4,8 +4,10 @@ An Andela project system to aid in the random allocation of office space to fell
 # Installation
 Install `python` and `pip`
 # Usage
+cd outside project directory and 
 ```
-python main.py
+python dojo
 ```
 
 # Special Thanks
+My facilitators and group mates for the good job done
