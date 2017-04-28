@@ -4,6 +4,11 @@ Dojo Space Allocation
 Usage:
     dojo create_room <room_type> <room_name>...
     dojo add_person <person_name> <person_type> [wants_accomodation]
+    dojo print_room <room_name>
+    dojo print_allocations [-o=filename]
+    dojo print_unallocated [-o=filename]
+    dojo reallocate_person <person_identifier> <new_room_name>
+    dojo save_state [--db=sqlite_database]
     dojo -h | --help
     dojo --version
     dojo close
@@ -61,13 +66,65 @@ class SpaceAllocation(cmd.Cmd):
 
     @get_docopt_args
     def do_add_person(params):
-        """ Usage: add_person <person_name> <person_type> [wants_accomodation]"""
-        wants_accomodation = params["wants_accomodation"]
+        """ Usage: add_person <person_name> <person_type> [<wants_accomodation>]"""
+        wants_accomodation = params["<wants_accomodation>"]
         if wants_accomodation == 'Y':
             wants_accomodation = True
         else:
             wants_accomodation = False
         return dojo.add_person(params["<person_name>"], params["<person_type>"], wants_accomodation)
+
+    @get_docopt_args
+    def do_print_room(params):
+        """ Usage: print_room <room_name> """
+        room = params["<room_name>"]
+        empty = True
+        if room in dojo.living_spaces:
+            spaces = dojo.living_spaces
+        elif room in dojo.office_spaces:
+            spaces = dojo.office_spaces
+        else:
+            print("Room not found")
+            return
+
+        for x in range(0, len(spaces[room].room_mates)):
+            if spaces[room].room_mates[x] == 'X':
+                continue
+            else:
+                print(spaces[room].room_mates[x])
+                empty = False
+        if empty is True:
+            print("Empty")
+
+    @get_docopt_args
+    def do_print_allocations(params):
+        """Usage: print_allocations [-o=filename] """
+        return dojo.print_allocations()
+
+    @get_docopt_args
+    def do_print_unallocated(params):
+        """Usage: print_unallocated [-o=filename]"""
+        return dojo.print_unallocated_people()
+
+    @get_docopt_args
+    def do_reallocate_person(params):
+        """Usage: reallocate_person <person_identifier> <new_room_name>"""
+        return dojo.reallocate_person(params["<person_identifier>"], params["<new_room_name>"])
+
+    @get_docopt_args
+    def do_load_people(params):
+        """Usage: load_people """
+        return dojo.load_people()
+
+    @get_docopt_args
+    def do_save_state(params):
+        """Usage: save_state [--db=sqlite_database] """
+        pass
+
+    @get_docopt_args
+    def do_load_state(params):
+        """load_state <sqlite_database>"""
+        pass
 
 
 SpaceAllocation().cmdloop()
