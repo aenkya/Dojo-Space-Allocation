@@ -4,10 +4,12 @@ from living_space.living_space import living_space
 from office_space.office_space import office_space
 from fellow.fellow import Fellow
 from staff.staff import Staff
+from database.database import Database, Person, Room
 
 
 class Dojo(object):
     """Dojo Class to create rooms, add them, define the room type and add people to the rooms"""
+    DATABASE_VAL = None
 
     def __init__(self, id, name):
         self.id = id
@@ -25,13 +27,14 @@ class Dojo(object):
         self.allocated_spots = {}
         self.unallocated_people = []
         self.root_dir = os.path.dirname(os.path.abspath(__file__))
+        self.database = Database(self.DATABASE_VAL)
 
     def create_room(self, room_type, rooms):
         room_available = False
         if isinstance(rooms, list):
             space = room_type.title()
             if (not space == 'Office') and (not space == 'Living'):
-                raise ValueError("Space Type not recognized")
+                print("Room type not recognized")
             for room_name in rooms:  # Loop through rooms argument for all rooms in list
                 if space == 'Office':
                     if self.check_if_room_exists(room_name, space) is True:
@@ -180,7 +183,6 @@ class Dojo(object):
                         break
                 print(person + ' has been allocated the office space ' +
                       self.office_spaces[random_value].name)
-                self.staff[person].wants_accomodation = False
                 allocated = True
 
         if len(self.available_office_slots) == 0:
@@ -234,6 +236,7 @@ class Dojo(object):
                     else:
                         print(self.office_spaces[i])
 
+    # TODO: Complete Functionallity
     def show_available_room(self, room_name, room_type):
         if room_type == 'living_space':
             print(self.living_spaces.find('room_name'))
@@ -283,6 +286,7 @@ class Dojo(object):
         self.print_to_file(
             '\n'.join(x.name for x in self.unallocated_people), file_name)
 
+    # TODO: Complete Functionallity
     def reallocate_person(self, person_name, new_room_name):
         for k in self.office_spaces:
             for x in range(0, len(self.office_spaces[k].room_mates)):
@@ -290,7 +294,7 @@ class Dojo(object):
                     print(self.staff[x].name)
 
     def load_people(self):
-        file_name = input("Enter file to save to: ")
+        file_name = input("Enter file to load from: ")
         backroot = " \..\ "
         folder = "files\ "
         folder.strip()
@@ -300,12 +304,69 @@ class Dojo(object):
         if os.path.isfile(file_path):
             with open(file_path, "r") as f:
                 for line in f.readlines():
-                    tokens = line.strip().split(" ")
-                    name = " ".join(tokens[:2])
-                    person_type = tokens[2]
-                    wants_accomodation = tokens[3:][0] if tokens[3:] else 'N'
+                    values = line.strip().split(" ")
+                    person_name = " ".join(values[:2])
+                    person_type = values[2]
+                    wants_accomodation = values[3:][0] if values[3:] else 'N'
                     if wants_accomodation == 'Y':
                         wants_accomodation = True
                     else:
                         wants_accomodation = False
-                    self.add_person(name, person_type, wants_accomodation)
+                    self.add_person(person_name, person_type,
+                                    wants_accomodation)
+
+    def save_state(self, database=None):
+        #self.database.clear()
+        self.save_people()
+        self.save_rooms()
+        if self.database.save():
+            print("Dojo's state saved successfully")
+
+    def save_people(self):
+        '''Save the current state of people in Dojo to the database'''
+        for person in self.fellows:
+            person_name = person.name
+            wants_accomodation = person.wants_accomodation
+            gender = person.gender
+            nationality = person.nationality
+
+            person_to_save = Fellow(
+                person_name=person_name,
+                wants_accomodation=wants_accomodation,
+                nationality=nationality,
+                gender=gender
+            )
+            self.database.session.add(person_to_save)
+
+        print("Fellows saved")
+
+        for person in self.staff:
+            person_name = person.name
+            gender = person.gender
+            nationality = person.nationality
+
+            person_to_save = Fellow(
+                person_name=person_name,
+                nationality=nationality,
+                gender=gender
+            )
+            self.database.session.add(person_to_save)
+
+        print("Staff saved")
+
+    def save_rooms(self):
+        for room in self.living_spaces:
+            room_to_save = Room(
+                name=room.name,
+                occupants=room.room_mates,
+                capacity=room.capacity
+            )
+            self.database.session.add(room_to_save)
+            print("Living Spaces saved")
+        for room in self.office_spaces:
+            room_to_save = Room(
+                name=room.name,
+                occupants=room.room_mates,
+                capacity=room.capacity
+            )
+            self.database.session.add(room_to_save)
