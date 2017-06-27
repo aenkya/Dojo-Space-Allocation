@@ -29,7 +29,7 @@ Examples
 import os
 import cmd
 from docopt import docopt, DocoptExit
-from dojo.dojo import Dojo
+from app.models.dojo import Dojo
 
 dojo = Dojo('DOJO01', 'The Dojo')
 
@@ -131,7 +131,7 @@ class SpaceAllocation(cmd.Cmd):
     @get_docopt_args
     def do_load_state(params):
         """load_state <sqlite_database>"""
-        pass
+        return dojo.load_state(params['sqlite_database'])
 
 
 SpaceAllocation().cmdloop()
