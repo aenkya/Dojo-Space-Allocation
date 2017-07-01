@@ -1,6 +1,6 @@
 *.sublime-workspace
 *.sublime-project
-*.txt
+*/files/*.txt
 */__pycache__
 *.pyc
 /practice
