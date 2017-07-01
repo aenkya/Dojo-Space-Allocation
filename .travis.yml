@@ -7,6 +7,5 @@ install: "pip install -r requirements.txt"
 script: 
   - python -m unittest discover
   - coverage run run_tests.py
-  - coverage report
 after_success:
   - coveralls
