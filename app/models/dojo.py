@@ -332,15 +332,15 @@ class Dojo(object):
         '''Save the current state of people in Dojo to the database'''
         for person in self.fellows:
             person_name = self.fellows[person].name
-            wants_accomodation = self.fellows[person].wants_accomodation
             gender = self.fellows[person].gender
             nationality = self.fellows[person].nationality
+            age = self.fellows[person].age
 
             person_to_save = Fellow(
-                person_name=person_name,
-                wants_accomodation=wants_accomodation,
+                name=person_name,
                 nationality=nationality,
-                gender=gender
+                gender=gender,
+                age=age
             )
             self.database.session.add(person_to_save)
 
@@ -362,7 +362,7 @@ class Dojo(object):
 
     def save_rooms(self):
         for room in self.living_spaces:
-            room_to_save = Room(
+            room_to_save = living_space(
                 name=self.living_spaces[room].name,
                 capacity=self.living_spaces[room].capacity
             )
@@ -370,7 +370,7 @@ class Dojo(object):
             self.database.session.add(room_to_save)
             print("Living Spaces saved")
         for room in self.office_spaces:
-            room_to_save = Room(
+            room_to_save = office_space(
                 name=self.office_spaces[room].name,
                 capacity=self.office_spaces[room].capacity
             )

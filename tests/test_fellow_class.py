@@ -2,7 +2,7 @@
 Unit tests for the Fellow Class
 """
 import unittest
-from models.fellow import Fellow
+from app.models.fellow import Fellow
 
 
 class FellowClassTest(unittest.TestCase):

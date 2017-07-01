@@ -2,7 +2,7 @@
 Unit tests for the Dojo Class
 """
 import unittest
-from models.dojo import Dojo
+from app.models.dojo import Dojo
 
 
 class DojoClassTest(unittest.TestCase):
@@ -10,6 +10,8 @@ class DojoClassTest(unittest.TestCase):
 
     def setUp(self):
         self.dojo = Dojo('THEDOJO', 'The Dojo')
+        self.room_type = 'Office'
+        self.rooms = ['Grey', 'Blue']
 
     def test_dojo_instance(self):
         self.assertIsInstance(
@@ -23,3 +25,8 @@ class DojoClassTest(unittest.TestCase):
         kwargs = {}
         self.assertRaises(ValueError, self.dojo.create_room,
                           *args, **kwargs)
+
+    def test_create_room_creates_room_of_type_office_when_argument_office_passed(self):
+        self.dojo.office_spaces = {}
+        self.dojo.create_room(self.room_type, self.rooms)
+        self.assertGreater(len(self.dojo.office_spaces), 0)

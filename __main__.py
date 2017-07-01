@@ -18,9 +18,11 @@ Arguments:
     wants_accommodation    Specify if person(only fellow) wants living space
 
 Options:
-    -h, --help  Use with a command to show the command's help messsage
-    --version  Show version
-    --close -c   Close the program
+    -h,--help           : Show this help message and exit
+    --version           : Show version.
+    -i, --interactive   : Interactive Mode
+    quit                : Quit the interactive mode
+    -o                  : filename
 
 Examples
     dojo create_room Office LLK
@@ -132,6 +134,12 @@ class SpaceAllocation(cmd.Cmd):
     def do_load_state(params):
         """load_state <sqlite_database>"""
         return dojo.load_state(params['sqlite_database'])
+
+    @get_docopt_args
+    def do_quit(params):
+        """Usage: quit"""
+        print('Thank you!')
+        exit()
 
 
 SpaceAllocation().cmdloop()

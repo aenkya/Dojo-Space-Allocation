@@ -4,7 +4,7 @@ Unit tests for the office_space Class
 import unittest
 from mock import MagicMock, mock, patch
 
-from models.database import Database, Person, Room
+from app.models.database import Database, Person, Room
 
 
 class DatabaseClassTest(unittest.TestCase):
@@ -28,7 +28,7 @@ class DatabaseClassTest(unittest.TestCase):
             self.room, Room, msg='The object should be an instance of the `Room` class')
 
     def test_engine_and_session(self):
-        database_path = 'sqlite:///./database/dojo.db'
+        database_path = 'sqlite:///dojo.db'
         sqlalchemy = MagicMock()
         sqlalchemy.create_engine = MagicMock(return_value=mock)
         fake_engine = sqlalchemy.create_engine(database_path)

@@ -2,7 +2,7 @@
 Unit tests for the living_space Class
 """
 import unittest
-from models.living_space import living_space
+from app.models.living_space import living_space
 
 
 class living_space_classTest(unittest.TestCase):
