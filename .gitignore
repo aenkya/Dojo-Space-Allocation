@@ -3,4 +3,5 @@
 *.txt
 */__pycache__
 *.pyc
+/practice
 *.sqlite
