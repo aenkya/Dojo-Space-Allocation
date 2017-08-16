@@ -1,3 +1,5 @@
+import os
+
 from sqlalchemy import (Boolean, Column, create_engine, Integer, String,
                         ForeignKey, Table)
 from sqlalchemy.ext.declarative import declarative_base
@@ -88,16 +90,20 @@ class Staff(Person):
 class Database():
 
     def __init__(self, database=None):
-        if database:
-            self.database = database
-            if '.sqlite' not in self.database:
-                self.database += '.sqlite'
-        else:
-            self.database = 'dojo.sqlite'
-        self.engine = create_engine('sqlite:///' + self.database)
-        session = sessionmaker(bind=self.engine)
-        self.session = session()
-        BASE.metadata.create_all(self.engine)
+        self.db_name = None
+        self.session = None
+        self.engine = None
+
+    def create(self, db_name):
+        self.db_name = db_name
+        self._create_engine(self.db_name)
+        self._create_session()
+        return self
+
+    def read(self, db_name):
+        self.db_name = db_name
+        self._create_engine(self.db_name)
+        self._create_session()
 
     def clear(self):
         connection = self.engine.connect()
@@ -113,4 +119,13 @@ class Database():
     def drop(self, file_path):
         if os.path.exists(file_path):
             os.remove(file_path)
-            print ("{}.db has been deleted!".format(self.database))
+            print("{}.db has been deleted!".format(self.db_name))
+
+    def _create_engine(self, db_name):
+        self.engine = create_engine('sqlite:///' + db_name + '.db')
+        BASE.metadata.create_all(self.engine)
+        return self
+
+    def _create_session(self):
+        session = sessionmaker(bind=self.engine)
+        self.session = session()
