@@ -10,5 +10,5 @@ pbr==3.1.1
 pyparsing==2.2.0
 rednose==1.2.2
 six==1.10.0
-SQLAlchemy==1.1.9
+SQLAlchemy==1.2.18
 termstyle==0.1.11
